@@ -1,0 +1,26 @@
+{
+    "classNamePrefix": "_",
+    "classNameSuffix": ".class",
+    "classes": [
+        "core",
+        "error",
+        "model",
+        "view",
+        "layout",
+        "controller",
+        "overlay",
+        "route",
+        "session",
+        "config"
+    ],
+
+    "ConfigurationName": [
+        "global",
+        "cache",
+        "layout"
+    ],
+
+    "lib": [
+        "httpful"
+    ]
+}
