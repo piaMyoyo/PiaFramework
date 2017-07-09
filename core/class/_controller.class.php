@@ -2,7 +2,7 @@
 
 namespace pia\core;
 
-class _Pia_Controller extends pia\core\_Pia_Core
+class _Pia_Controller
 {
 
     public function init(){
