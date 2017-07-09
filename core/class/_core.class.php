@@ -12,11 +12,13 @@ class _Pia_Core
     private $_error;
     private $_config;
     private $_routing;
+    private $_version;
 
     public function __construct(){
         $this->_error = new PiaError;
         $this->_config = new PiaConfig;
         $this->_routing = new PiaRoute;
+        $this->_version = _PIA_VERSION_;
     }
 
     public function initError(){
