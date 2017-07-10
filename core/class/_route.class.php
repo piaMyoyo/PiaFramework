@@ -7,7 +7,7 @@ class _Pia_Route
 
     public $_QUERY_STRING;
 
-    public function init(){
+    public function init($config){
         if(array_key_exists('QUERY_STRING', $_SERVER))
             $this->_QUERY_STRING = $_SERVER['QUERY_STRING'];
         else $this->_QUERY_STRING = '';
