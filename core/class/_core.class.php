@@ -44,7 +44,8 @@ class _Pia_Core
     }
 
     public function initController(){
-        // Do it, just do it
+        // $this->_controller->init();
+        // return $this;
     }
 
 }

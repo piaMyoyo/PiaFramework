@@ -5,18 +5,15 @@ namespace pia\core;
 class _Pia_Config
 {
 
-    private $_core_json_global_config;
-    private $_app_json_global_config;
+    private $_GLOBAL_JSON;
+    private $_LAYOUT_JSON;
 
-    private $_core_json_layout_config;
-    private $_app_json_layout_config;
-
-    private $_global_config;
-    private $_layout_config;
+    private $_GLOBAL;
+    private $_LAYOUT;
 
     public function __construct(){
-        $this->getJsonGlobalConfiguration()
-             ->getJsonLayoutConfiguration();
+        $this->_GLOBAL_JSON = $this->getJsonConfiguration(_PIA_CORE_.'config/global.config.json', _PIA_APP_.'config/global.config.json');
+        $this->_LAYOUT_JSON = $this->getJsonConfiguration(_PIA_CORE_.'config/layout.config.json', _PIA_APP_.'config/layout.config.json');
     }
 
     public function init(){
@@ -24,46 +21,30 @@ class _Pia_Config
         return $this;
     }
 
-    private function getJsonGlobalConfiguration(){
-        $core_json_global_config_path = _PIA_CORE_.'config/global.config.json';
-        $app_json_global_config_path = _PIA_APP_.'config/global.config.json';
+    private function getJsonConfiguration($CORE_FILE_PATH, $APP_FILE_PATH){
 
-        if(file_exists($core_json_global_config_path)){
-            $this->_core_json_global_config = file_get_contents($core_json_global_config_path);
-        }else{
-            throw new Exception("Missing configuration file on $core_json_global_config_path");
-        }
+        if(file_exists($CORE_FILE_PATH))
+            $CORE_JSON = file_get_contents($CORE_FILE_PATH);
+        else throw new Exception("Missing configuration file on $CORE_FILE_PATH");
 
-        if(file_exists($app_json_global_config_path)){
-            $this->_app_json_global_config = file_get_contents($app_json_global_config_path);
+        if(file_exists($APP_FILE_PATH)){
+            $APP_JSON = file_get_contents($APP_FILE_PATH);
         }else{
-            $this->_app_json_global_config = array();
+            $APP_JSON = array();
         }
-        return $this;
+        return array(
+            'core' => $CORE_JSON,
+            'app' => $APP_JSON
+        );
     }
 
-    private function buildGlobalConfiguration(){
-        return (object) array_merge((array) json_decode($this->_core_json_global_config), (array) json_decode($this->_app_json_global_config));
-    }
-
-    private function getJsonLayoutConfiguration(){
-        $core_json_layout_config_path = _PIA_CORE_.'config/layout.config.json';
-        $app_json_layout_config_path = _PIA_APP_.'config/layout.config.json';
-
-        if(file_exists($core_json_layout_config_path))
-            $this->_core_json_layout_config = file_get_contents($core_json_layout_config_path);
-        else throw new Exception("Missing configuration file on $core_json_layout_config_path");
-
-        if(file_exists($app_json_layout_config_path)){
-            $this->_app_json_layout_config = file_get_contents($app_json_layout_config_path);
-        }else{
-            $this->_app_json_layout_config = array();
-        }
-        return $this;
+    private function toObjectConfiguration($CORE_JSON, $APP_JSON){
+        return (object) array_merge((array) json_decode($CORE_JSON), (array) json_decode($APP_JSON));
     }
 
     private function buildConfiguration(){
-        $this->_global_config = $this->buildGlobalConfiguration();
+        $this->_GLOBAL = $this->toObjectConfiguration($this->_GLOBAL_JSON['core'], $this->_GLOBAL_JSON['app']);
+        $this->_LAYOUT = $this->toObjectConfiguration($this->_LAYOUT_JSON['core'], $this->_LAYOUT_JSON['app']);
         return $this;
     }
 
