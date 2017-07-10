@@ -1,7 +1,12 @@
-#RewriteEngine On
-#RewriteBase /
-#RewriteRule ^index\.php$ - [L]
+############################ URL REWRTING ############################
+#### Without these rows /index.php?foo/bar
+#### With these rows /foo/bar
 
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteRule ^.*$ /index.php?$0 [L,QSA]
+
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ /index.php?$0 [L,QSA]

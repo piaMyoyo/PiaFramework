@@ -8,8 +8,8 @@ class _Pia_Config
     private $_GLOBAL_JSON;
     private $_LAYOUT_JSON;
 
-    private $_GLOBAL;
-    private $_LAYOUT;
+    public $_GLOBAL;
+    public $_LAYOUT;
 
     public function __construct(){
         $this->_GLOBAL_JSON = $this->getJsonConfiguration(_PIA_CORE_.'config/global.config.json', _PIA_APP_.'config/global.config.json');
