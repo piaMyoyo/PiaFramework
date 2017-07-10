@@ -19,5 +19,5 @@ if(!@include(_PIA_CORE_."/pia/pia.php")){
 
 $_PIA_CORE_ENTRY_POINT = new pia\core\_Pia_Core;
 $_PIA_CORE_ENTRY_POINT->initConfig()->initError();
-// var_dump($_PIA_CORE_ENTRY_POINT);
+var_dump($_PIA_CORE_ENTRY_POINT);
 ?>

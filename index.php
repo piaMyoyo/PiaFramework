@@ -1,6 +1,8 @@
 <?php
 // A new beginning
 
+define('_PIA_LOCATION_', 'dev'); // dev OR prod
+
 define('_PIA_ENV_', dirname(__FILE__));
 define('_PIA_CORE_', _PIA_ENV_.'/core/');
 define('_PIA_ENTRY_', _PIA_CORE_.'/entry/');
