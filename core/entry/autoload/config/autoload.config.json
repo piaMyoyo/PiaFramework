@@ -11,7 +11,8 @@
         "overlay",
         "route",
         "session",
-        "config"
+        "config",
+        "performance"
     ],
 
     "ConfigurationName": [
