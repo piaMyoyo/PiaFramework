@@ -24,5 +24,8 @@ $_PIA_CORE_ENTRY_POINT->initPerformance()
                       ->initRoute()
                       ->initController();
 
+// Everything start with a dream
+
 $_PIA_CORE_ENTRY_POINT->endPerformance();
+
 ?>

@@ -7,6 +7,7 @@ class _Pia_Performance
 
     private $_TOTAL_START;
     private $_TOTAL_END;
+    private $_TOTAL;
 
     public function init(){
         $this->performanceTotalStart();
@@ -14,15 +15,16 @@ class _Pia_Performance
 
     public function destroy(){
         $this->performanceTotalEnd();
-        var_dump(round($this->_TOTAL_END - $this->_TOTAL_START, 5));
+        $this->_TOTAL = round($this->_TOTAL_END - $this->_TOTAL_START, 5);
+        return $this->_TOTAL;
     }
 
     public function performanceTotalStart(){
-        $this->_TOTAL_START = microtime();
+        $this->_TOTAL_START = microtime(true);
     }
 
     public function performanceTotalEnd(){
-        $this->_TOTAL_END = microtime();
+        $this->_TOTAL_END = microtime(true);
     }
 
 }

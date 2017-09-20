@@ -6,6 +6,9 @@ class _Pia_Route
 {
 
     public $_QUERY_STRING;
+    public $_ENTRY_NAME;
+    public $_CTRL_PATH;
+    public $_PARAMS;
 
     public function __construct(){
         if(array_key_exists('QUERY_STRING', $_SERVER))
@@ -15,19 +18,8 @@ class _Pia_Route
 
     public function init($config){
         
-        $routeEntryName = trim($config->_GLOBAL->entryName);
-        var_dump($this->_QUERY_STRING);
+        $this->_ENTRY_NAME = trim($config->_GLOBAL->entryName);
         $this->stringRouteReader();
-
-        // if($this->_QUERY_STRING && $this->_QUERY_STRING !== '' && isset($this->_QUERY_STRING)){
-        //     // Do some treatment
-        // }else{
-        //     if($routeEntryName && isset($routeEntryName)){
-        //         $this->_QUERY_STRING = $routeEntryName;
-        //     }else{
-        //         $this->_QUERY_STRING = 'index';
-        //     }
-        // }
 
         return $this;
     }
@@ -35,11 +27,42 @@ class _Pia_Route
     public function stringRouteReader(){
         $cleanStringRoute = $this->cleanStringRoute();
         $arraySplitedRoute = explode('/', $cleanStringRoute);
-        var_dump($arraySplitedRoute);
+        $routePath = '';
+        $routeIteration = count($arraySplitedRoute);
+        $i = 0;
+        
+        foreach($arraySplitedRoute as $key => $route){
+            $i++;
+            $routeString = $routePath.'/'.$route;
+            $routeDirCheck = _PIA_CTRL_.$routeString;
+            $routeFileCheck = _PIA_CTRL_.$routeString._PIA_CORE_FILES_EXTENSION_;
+            
+            if($routeIteration > $i && is_dir($routeDirCheck)){
+                $routePath = $routeString;
+                continue;
+            }elseif($routeIteration == $i && is_dir($routeDirCheck) && file_exists($routeDirCheck.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_)){
+                $routePath = $routeDirCheck.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_;
+                break;
+            }elseif($routeIteration == $i && file_exists($routeFileCheck)){
+                $routePath = $routeFileCheck;
+                break;
+            }elseif($routeIteration > $i && file_exists($routeFileCheck)){
+                $routePath = $routeFileCheck;
+                $this->_PARAMS = $this->generateParams($arraySplitedRoute, $key);
+                break;          
+            }else{
+                $routePath = _PIA_CTRL_ERR_.'/404'._PIA_CORE_FILES_EXTENSION_;
+                break;
+            }
+        }
+        var_dump($arraySplitedRoute, $routePath);
+        
+        $this->_CTRL_PATH = $routePath;
     }
 
     public function cleanStringRoute(){
-        $stringRoute = trim(urldecode($this->_QUERY_STRING));
+        $stringRoute = explode('&', trim(urldecode($this->_QUERY_STRING)));
+        $stringRoute = $stringRoute[0];
 
         while(substr($stringRoute, 0, 1) === '/'){
             $stringRoute = trim(substr($stringRoute, 1));
@@ -52,6 +75,12 @@ class _Pia_Route
         return $stringRoute;
     }
 
+    public function generateParams($routeArray, $index){
+        for($i=0;$i<=$index;$i++){
+            unset($routeArray[$i]);
+        }
+        
+    }
 }
 
 ?>
