@@ -49,13 +49,17 @@ class _Pia_Route
             }elseif($routeIteration > $i && file_exists($routeFileCheck)){
                 $routePath = $routeFileCheck;
                 $this->_PARAMS = $this->generateParams($arraySplitedRoute, $key);
-                break;          
+                break;
+            }elseif($routeIteration > $i && file_exists(_PIA_CTRL_.$routePath.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_)){
+                $routePath = _PIA_CTRL_.$routePath.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_;
+                $this->_PARAMS = $this->generateParams($arraySplitedRoute, $key);
+                break;
             }else{
                 $routePath = _PIA_CTRL_ERR_.'/404'._PIA_CORE_FILES_EXTENSION_;
                 break;
             }
         }
-        var_dump($arraySplitedRoute, $routePath);
+        // var_dump($arraySplitedRoute, $routePath);
         
         $this->_CTRL_PATH = $routePath;
     }
@@ -79,7 +83,7 @@ class _Pia_Route
         for($i=0;$i<=$index;$i++){
             unset($routeArray[$i]);
         }
-        
+        var_dump($routeArray);
     }
 }
 
