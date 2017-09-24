@@ -57,8 +57,8 @@ class _Pia_Core
     }
 
     public function initController(){
-        // $this->_controller->init();
-        // return $this;
+        $this->_controller->init($this->_routing);
+        return $this;
     }
 
 }

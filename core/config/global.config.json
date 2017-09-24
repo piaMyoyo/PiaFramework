@@ -1,5 +1,9 @@
 {
     "entryName": "index",
+    "controller": {
+        "prefix": "c_",
+        "suffix": ""
+    },
     "data": [
         "app"
     ]
