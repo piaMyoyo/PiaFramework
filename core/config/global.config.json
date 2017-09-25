@@ -1,8 +1,12 @@
 {
     "entryName": "index",
+    "entryMethod": "index",
     "controller": {
-        "prefix": "c_",
-        "suffix": ""
+        "prefix": "c",
+        "suffix": "",
+        "errors": {
+            "_404": "pia_errors_404"
+        }
     },
     "data": [
         "app"

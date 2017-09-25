@@ -31,6 +31,10 @@ class _Pia_Core
         return $this->_config;
     }
 
+    public function getRoute(){
+        return $this->_routing;
+    }
+
     public function initPerformance(){
         $this->_performance->init();
         return $this;

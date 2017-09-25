@@ -8,6 +8,7 @@ class _Pia_Route
     public $_QUERY_STRING;
     public $_ENTRY_NAME;
     public $_CTRL_PATH;
+    public $_CTRL_ERRORS;
     public $_CTRL_NAME_PREFIX;
     public $_CTRL_NAME_SUFFIX;
     public $_CTRL_NAME;
@@ -25,6 +26,7 @@ class _Pia_Route
         $this->_ENTRY_NAME = trim($config->_GLOBAL->entryName);
         $this->_CTRL_NAME_PREFIX = trim($config->_GLOBAL->controller->prefix);
         $this->_CTRL_NAME_SUFFIX = trim($config->_GLOBAL->controller->suffix);
+        $this->_CTRL_ERRORS = $config->_GLOBAL->controller->errors;
         $this->stringRouteReader();
 
         return $this;
@@ -33,6 +35,7 @@ class _Pia_Route
     public function stringRouteReader(){
         $cleanStringRoute = $this->cleanStringRoute();
         $arraySplitedRoute = explode('/', $cleanStringRoute);
+        $prevRouteString = '';
         $routePath = '';
         $controllerName = $this->_CTRL_NAME_PREFIX;
         $routeIteration = count($arraySplitedRoute);
@@ -41,34 +44,36 @@ class _Pia_Route
         foreach($arraySplitedRoute as $key => $route){
             $i++;
             $routeString = $routePath.'/'.$route;
+            if($routeString === '/')
+                $routeString = '';
             $routeDirCheck = _PIA_CTRL_.$routeString;
             $routeFileCheck = _PIA_CTRL_.$routeString._PIA_CORE_FILES_EXTENSION_;
             
             if($routeIteration > $i && is_dir($routeDirCheck)){
                 $routePath = $routeString;
-                $controllerName = $controllerName.$route;
+                $prevRouteString = $routeString;
                 continue;
-            }elseif($routeIteration == $i && is_dir($routeDirCheck) && file_exists($routeDirCheck.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_)){
-                $routePath = $routeDirCheck.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_;
-                $this->_CTRL_NAME = $controllerName.$this->_CTRL_NAME_SUFFIX;
-                break;
             }elseif($routeIteration == $i && file_exists($routeFileCheck)){
                 $routePath = $routeFileCheck;
-                $this->_CTRL_NAME = $controllerName.$this->_CTRL_NAME_SUFFIX;
+                $this->_CTRL_NAME = $this->_CTRL_NAME_PREFIX.str_replace('/', '_', strtolower($routeString)).$this->_CTRL_NAME_SUFFIX;
+                break;
+            }elseif($routeIteration == $i && is_dir($routeDirCheck) && file_exists($routeDirCheck.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_)){
+                $routePath = $routeDirCheck.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_;
+                $this->_CTRL_NAME = $this->_CTRL_NAME_PREFIX.str_replace('/', '_', strtolower($routeString.'_'.$this->_ENTRY_NAME)).$this->_CTRL_NAME_SUFFIX;
                 break;
             }elseif($routeIteration > $i && file_exists($routeFileCheck)){
                 $routePath = $routeFileCheck;
-                $this->_CTRL_NAME = $controllerName.$this->_CTRL_NAME_SUFFIX;
+                $this->_CTRL_NAME = $this->_CTRL_NAME_PREFIX.str_replace('/', '_', strtolower($routeString)).$this->_CTRL_NAME_SUFFIX;
                 $this->generateParams($arraySplitedRoute, $key);
                 break;
             }elseif($routeIteration > $i && file_exists(_PIA_CTRL_.$routePath.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_)){
                 $routePath = _PIA_CTRL_.$routePath.'/'.$this->_ENTRY_NAME._PIA_CORE_FILES_EXTENSION_;
-                $this->_CTRL_NAME = $controllerName.$this->_CTRL_NAME_SUFFIX;
+                $this->_CTRL_NAME = $this->_CTRL_NAME_PREFIX.str_replace('/', '_', strtolower($prevRouteString.'_'.$this->_ENTRY_NAME)).$this->_CTRL_NAME_SUFFIX;
                 $this->generateParams($arraySplitedRoute, $key-1);
                 break;
             }else{
                 $routePath = _PIA_CTRL_ERR_.'/404'._PIA_CORE_FILES_EXTENSION_;
-                $this->_CTRL_NAME = 'pia_errors_404';
+                $this->_CTRL_NAME = trim($this->_CTRL_ERRORS->_404);
                 break;
             }
         }
