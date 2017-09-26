@@ -31,12 +31,12 @@ if(class_exists($_PIA_CORE_ENTRY_POINT->getRoute()->_CTRL_NAME)){
     $_CTRL_NAME = $_PIA_CORE_ENTRY_POINT->getConfig()->_GLOBAL->controller->errors->_404;
 }
 
-$_PIA_MAIN_CONTROLLER = new $_CTRL_NAME();
+$_PIA_MAIN_CONTROLLER = new $_CTRL_NAME($_PIA_CORE_ENTRY_POINT);
 
 if(method_exists($_PIA_MAIN_CONTROLLER, $_PIA_CORE_ENTRY_POINT->getConfig()->_GLOBAL->entryMethod)){
     $_PIA_MAIN_METHOD = $_PIA_CORE_ENTRY_POINT->getConfig()->_GLOBAL->entryMethod;
     $_PIA_MAIN_CONTROLLER->$_PIA_MAIN_METHOD();
-}else exit;;
+}else exit;
 
 
 
