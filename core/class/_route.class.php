@@ -22,7 +22,7 @@ class _Pia_Route
     }
 
     public function init($config){
-        
+
         $this->_ENTRY_NAME = trim($config->_GLOBAL->entryName);
         $this->_CTRL_NAME_PREFIX = trim($config->_GLOBAL->controller->prefix);
         $this->_CTRL_NAME_SUFFIX = trim($config->_GLOBAL->controller->suffix);
@@ -40,7 +40,7 @@ class _Pia_Route
         $controllerName = $this->_CTRL_NAME_PREFIX;
         $routeIteration = count($arraySplitedRoute);
         $i = 0;
-        
+
         foreach($arraySplitedRoute as $key => $route){
             $i++;
             $routeString = $routePath.'/'.$route;
@@ -48,7 +48,7 @@ class _Pia_Route
                 $routeString = '';
             $routeDirCheck = _PIA_CTRL_.$routeString;
             $routeFileCheck = _PIA_CTRL_.$routeString._PIA_CORE_FILES_EXTENSION_;
-            
+
             if($routeIteration > $i && is_dir($routeDirCheck)){
                 $routePath = $routeString;
                 $prevRouteString = $routeString;
@@ -77,7 +77,7 @@ class _Pia_Route
                 break;
             }
         }
-        
+
         $this->_CTRL_PATH = $routePath;
     }
 

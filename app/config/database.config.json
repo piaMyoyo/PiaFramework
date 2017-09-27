@@ -1,0 +1,10 @@
+{
+    "default": {
+        "type": "mysql",
+        "host": "localhost",
+        "name": "db_name",
+        "port": "db_port",
+        "user": "db_user",
+        "pass": "db_password"
+    }
+}

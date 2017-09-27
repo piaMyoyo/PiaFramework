@@ -11,6 +11,7 @@ abstract class _Pia_Controller
     private $_ROUTE;
 
     private $_OUTPUT;
+    private $_LAYOUT;
     private $_MODELS;
 
     public function __construct(){
