@@ -1,7 +1,5 @@
 <?php
 
-// namespace pia\app\controller\home;
-
 use pia\core\_Pia_Controller as PiaController;
 
 class c_home extends PiaController

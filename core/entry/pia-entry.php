@@ -33,11 +33,19 @@ if(class_exists($_PIA_CORE_ENTRY_POINT->getRoute()->_CTRL_NAME)){
 
 $_PIA_MAIN_CONTROLLER = new $_CTRL_NAME($_PIA_CORE_ENTRY_POINT);
 
-if(method_exists($_PIA_MAIN_CONTROLLER, $_PIA_CORE_ENTRY_POINT->getConfig()->_GLOBAL->entryMethod)){
+$_PIA_ROUTE_PARAMS = $_PIA_CORE_ENTRY_POINT->getRoute()->_KPARAMS;
+
+if($_PIA_ROUTE_PARAMS && is_array($_PIA_ROUTE_PARAMS) && $_PIA_ROUTE_PARAMS[0] && method_exists($_PIA_MAIN_CONTROLLER, $_PIA_ROUTE_PARAMS[0])){
+    $_PIA_MAIN_METHOD = $_PIA_ROUTE_PARAMS[0];
+    unset($_PIA_ROUTE_PARAMS[0]);
+}elseif(method_exists($_PIA_MAIN_CONTROLLER, $_PIA_CORE_ENTRY_POINT->getConfig()->_GLOBAL->entryMethod)){
     $_PIA_MAIN_METHOD = $_PIA_CORE_ENTRY_POINT->getConfig()->_GLOBAL->entryMethod;
-    $_PIA_MAIN_CONTROLLER->$_PIA_MAIN_METHOD();
 }else exit;
 
+$_PIA_MAIN_CONTROLLER->setIndexParams($_PIA_ROUTE_PARAMS);
+$_PIA_MAIN_CONTROLLER->setMethod($_PIA_MAIN_METHOD);
+$_PIA_MAIN_CONTROLLER->setRoute($_PIA_CORE_ENTRY_POINT->getRoute());
+$_PIA_MAIN_CONTROLLER->$_PIA_MAIN_METHOD();
 
 
 // Everything start with a dream
