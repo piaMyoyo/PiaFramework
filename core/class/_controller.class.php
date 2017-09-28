@@ -9,6 +9,7 @@ abstract class _Pia_Controller
     private $_INDEX_PARAMS;
     private $_METHOD;
     private $_ROUTE;
+    private $_CONFIG;
 
     private $_OUTPUT;
     private $_LAYOUT;
@@ -48,6 +49,14 @@ abstract class _Pia_Controller
 
     protected function getRoute(){
         return $this->_ROUTE;
+    }
+
+    public function setConfig($config){
+        $this->_CONFIG = $config;
+    }
+
+    protected function getConfig(){
+        return $this->_CONFIG;
     }
 
     protected function prepare(){

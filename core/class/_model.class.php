@@ -13,6 +13,7 @@ abstract class _Pia_Model
     public function __construct(){
         $this->_DEFAULT = [
             "type" => "mysql",
+            "host" => "localhost",
             "port" => "3306"
         ];
     }
