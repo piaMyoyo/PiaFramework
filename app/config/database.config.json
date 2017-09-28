@@ -2,9 +2,9 @@
     "default": {
         "type": "mysql",
         "host": "localhost",
-        "name": "db_name",
-        "port": "db_port",
-        "user": "db_user",
-        "pass": "db_password"
+        "name": "pia",
+        "port": "3306",
+        "user": "root",
+        "pass": ""
     }
 }

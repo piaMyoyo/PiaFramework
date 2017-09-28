@@ -7,13 +7,16 @@ class _Pia_Config
 
     private $_GLOBAL_JSON;
     private $_LAYOUT_JSON;
+    private $_DB_JSON;
 
     public $_GLOBAL;
     public $_LAYOUT;
+    public $_DB;
 
     public function __construct(){
         $this->_GLOBAL_JSON = $this->getJsonConfiguration(_PIA_CORE_.'config/global.config.json', _PIA_APP_.'config/global.config.json');
         $this->_LAYOUT_JSON = $this->getJsonConfiguration(_PIA_CORE_.'config/layout.config.json', _PIA_APP_.'config/layout.config.json');
+        $this->_DB_JSON = $this->getJsonConfiguration(_PIA_CORE_.'config/database.config.json', _PIA_APP_.'config/database.config.json');
     }
 
     public function init(){
@@ -45,6 +48,7 @@ class _Pia_Config
     private function buildConfiguration(){
         $this->_GLOBAL = $this->toObjectConfiguration($this->_GLOBAL_JSON['core'], $this->_GLOBAL_JSON['app']);
         $this->_LAYOUT = $this->toObjectConfiguration($this->_LAYOUT_JSON['core'], $this->_LAYOUT_JSON['app']);
+        $this->_DB = $this->toObjectConfiguration($this->_DB_JSON['core'], $this->_DB_JSON['app']);
         return $this;
     }
 

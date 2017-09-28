@@ -2,6 +2,8 @@
 
 namespace pia\core;
 
+use pia\core\_Pia_Model as PiaModel;
+
 abstract class _Pia_Controller
 {
 
@@ -16,7 +18,7 @@ abstract class _Pia_Controller
     private $_MODELS;
 
     public function __construct(){
-
+        $this->_MODELS = [];
     }
 
     public function setParams($params){
@@ -76,11 +78,15 @@ abstract class _Pia_Controller
     }
 
     protected function loadModel($model){
-        // Charge un model
+        
     }
 
     protected function getModel($path){
         // Appel un model chargé
+    }
+
+    protected function modelExists($model){
+
     }
 
 }

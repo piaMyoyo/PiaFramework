@@ -10,6 +10,7 @@ class c_home extends PiaController
     }
 
     public function index(){
+        $this->loadModel('default');
         $this->render();
     }
 

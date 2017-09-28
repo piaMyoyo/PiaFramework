@@ -2,7 +2,7 @@
 
 // Application environment vars
 define('_PIA_APP_', _PIA_ENV_.'/app/');
-define('_PIA_CTRL_', _PIA_APP_.'controllers');
+define('_PIA_CTRL_', _PIA_APP_.'controller');
 define('_PIA_CTRL_ERR_', _PIA_CTRL_.'/errors');
 // -----------------------------------------
 
