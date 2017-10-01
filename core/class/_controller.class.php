@@ -78,7 +78,7 @@ abstract class _Pia_Controller
     }
 
     protected function loadModel($model){
-        
+        // require $this->getModelPath($model);
     }
 
     protected function getModel($path){
@@ -86,6 +86,10 @@ abstract class _Pia_Controller
     }
 
     protected function modelExists($model){
+
+    }
+
+    private function getModelPath($model){
 
     }
 

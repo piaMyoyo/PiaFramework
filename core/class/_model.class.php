@@ -10,6 +10,10 @@ abstract class _Pia_Model
 
     private $_DEFAULT;
 
+    protected $_TYPE;
+    protected $_HOST;
+    protected $_PORT;
+
     public function __construct(){
         $this->_DATABASE = "default";
         $this->_DEFAULT = [
@@ -34,11 +38,27 @@ abstract class _Pia_Model
         $db_params = $db_config->$model;
         $this->_MODELS[$model] = new PiaModel;
 
-        $this->_MODELS[$model]->init($db_params);
         if(!array_key_exists("type", $params))
-            $params = '';
-        $this->_PDO = new PDO('mysql:host=mon_serveur;dbname=ma_bdd;port=mon_port', 'mon_identifiant', 'mon_mdp');
-        return $this;
+            $this->_TYPE = $this->_DEFAULT['type'];
+        else $this->_TYPE = $db_params->type;
+
+        if(!array_key_exists("host", $params))
+            $this->_HOST = $this->_DEFAULT['host'];
+        else $this->_HOST = $db_params->host;
+
+        if(!array_key_exists("port", $params))
+            $this->_PORT = $this->_DEFAULT['port'];
+        else $this->_PORT = $db_params->port;
+
+        $_PDO_CONNECT = $this->_TYPE.':host='.$this->_HOST.';dbname='.$db_params->name.';port='.$this->_PORT;
+
+        try{
+            $this->_PDO = new PDO($_PDO_CONNECT, $db_params->user, $db_params->pass);
+            return $this;
+        }
+        catch (Exception $e){
+          die("Unable to connect to database: " . $e->getMessage());
+        }
     }
 
 }
