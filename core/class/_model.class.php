@@ -2,14 +2,16 @@
 
 namespace pia\core;
 
+use PDO;
+
 abstract class _Pia_Model
 {
 
-    private $_PDO;
     private $_DATABASE;
 
     private $_DEFAULT;
 
+    protected $_PDO;
     protected $_TYPE;
     protected $_HOST;
     protected $_PORT;
@@ -28,25 +30,20 @@ abstract class _Pia_Model
         return $this;
     }
 
-    public function init(){
-        $db_config = $this->_CONFIG->_DB;
+    public function init($params){
+        $dbName = $this->_DATABASE;
+        $db_params = $params->$dbName;
 
-        if(!array_key_exists($model, $db_config)){
-            die('Unable to connect database.');
-        }
 
-        $db_params = $db_config->$model;
-        $this->_MODELS[$model] = new PiaModel;
-
-        if(!array_key_exists("type", $params))
+        if(!array_key_exists("type", $db_params))
             $this->_TYPE = $this->_DEFAULT['type'];
         else $this->_TYPE = $db_params->type;
 
-        if(!array_key_exists("host", $params))
+        if(!array_key_exists("host", $db_params))
             $this->_HOST = $this->_DEFAULT['host'];
         else $this->_HOST = $db_params->host;
 
-        if(!array_key_exists("port", $params))
+        if(!array_key_exists("port", $db_params))
             $this->_PORT = $this->_DEFAULT['port'];
         else $this->_PORT = $db_params->port;
 

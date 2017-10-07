@@ -4,6 +4,7 @@
 define('_PIA_APP_', _PIA_ENV_.'/app/');
 define('_PIA_CTRL_', _PIA_APP_.'controller');
 define('_PIA_CTRL_ERR_', _PIA_CTRL_.'/errors');
+define('_PIA_MODEL_', _PIA_APP_.'model');
 // -----------------------------------------
 
 // Frontend environment vars

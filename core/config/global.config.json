@@ -8,6 +8,10 @@
             "_404": "pia_errors_404"
         }
     },
+    "model": {
+        "prefix": "",
+        "suffix": "_model"
+    },
     "data": [
         "app"
     ]

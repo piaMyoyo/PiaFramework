@@ -15,6 +15,7 @@ abstract class _Pia_Controller
 
     private $_OUTPUT;
     private $_LAYOUT;
+
     private $_MODELS;
 
     public function __construct(){
@@ -78,11 +79,22 @@ abstract class _Pia_Controller
     }
 
     protected function loadModel($model){
-        // require $this->getModelPath($model);
+        if($modelPath = $this->getModelPath($model)){
+            require_once $modelPath;
+            $modelName = $this->getModelName($model);
+            if(class_exists($modelName)){
+                $modelExpression = $this->getModelExpression($model);
+                $this->_MODELS[$modelExpression] = new $modelName();
+                $this->_MODELS[$modelExpression]->init($this->_CONFIG->_DB);
+                return $this->_MODELS[$modelExpression];
+            }else return false;
+        }else{
+            return false;
+        }
     }
 
-    protected function getModel($path){
-        // Appel un model chargé
+    protected function getModel($model){
+        return $this->_MODELS[$model];
     }
 
     protected function modelExists($model){
@@ -90,7 +102,23 @@ abstract class _Pia_Controller
     }
 
     private function getModelPath($model){
+        $fullPath = _PIA_MODEL_.'/'.$model._PIA_CORE_FILES_EXTENSION_;
+        if(file_exists($fullPath)){
+            return $fullPath;
+        }else{
+            return false;
+        }
+    }
 
+    private function getModelName($model){
+        $modelName = str_replace('/', '_', $model);
+        return $this->_CONFIG->_GLOBAL->model->prefix.$modelName.$this->_CONFIG->_GLOBAL->model->suffix;
+    }
+
+    private function getModelExpression($model){
+        $modelPathArray = explode('/', $model);
+        $modelNameIndex = count($modelPathArray) - 1;
+        return $modelPathArray[$modelNameIndex];
     }
 
 }
