@@ -1,0 +1,19 @@
+{
+    "template": "template/base",
+    "head": {
+        "css": {
+            "sources": [
+                "style",
+                "home"
+            ],
+            "concatenate": true
+        },
+        "js": {
+            "sources": [
+                "jquery-3.0.0",
+                "main"
+            ],
+            "concatenate": true
+        }
+    }
+}

@@ -11,9 +11,9 @@ class c_home extends PiaController
 
     public function index(){
         $this->loadModel('page');
-        $this->render();
         $pages = $this->getModel('page')->getPages();
-        var_dump($pages);
+        $this->prepareLayout('main')->loadView('home')->render()->output();
+        // var_dump($pages);
     }
 
 }

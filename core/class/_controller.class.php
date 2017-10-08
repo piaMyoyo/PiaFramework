@@ -13,10 +13,13 @@ abstract class _Pia_Controller
     private $_ROUTE;
     private $_CONFIG;
 
-    private $_OUTPUT;
-    private $_LAYOUT;
-
     private $_MODELS;
+    private $_LAYOUT;
+    private $_LAYOUT_CONFIG;
+    private $_VIEW;
+    private $_TEMPLATE;
+
+    private $_OUTPUT;
 
     public function __construct(){
         $this->_MODELS = [];
@@ -62,16 +65,64 @@ abstract class _Pia_Controller
         return $this->_CONFIG;
     }
 
-    protected function prepare(){
-        
+    protected function prepareLayout($layout){
+        $layoutParamsPath = _PIA_LAYOUT_.$layout.'.json';
+        if(file_exists($layoutParamsPath)){
+            $this->_LAYOUT = $layout;
+            $this->_LAYOUT_CONFIG = json_decode( file_get_contents( $layoutParamsPath ) );
+            $this->_TEMPLATE = $this->_LAYOUT_CONFIG->template;
+        }
+        return $this;
+    }
+
+    protected function getLayout(){
+        return $this->_LAYOUT;
+    }
+
+    protected function loadView($view){
+        $this->_VIEW = $view;
+        return $this;
+    }
+
+    protected function getView(){
+        return $this->_VIEW;
     }
 
     protected function render(){
-        echo 'Hello World !';
+        ob_start();
+        if($this->_TEMPLATE && !is_null($this->_TEMPLATE)){
+            include _PIA_VIEWS_.$this->_TEMPLATE._PIA_CORE_FILES_EXTENSION_;
+        }else{
+            include _PIA_VIEWS_.$this->_VIEW._PIA_CORE_FILES_EXTENSION_;
+        }
+        $this->_OUTPUT = ob_get_contents();
+        ob_end_clean();
+        return $this;
     }
 
-    protected function layout($path){
+    protected function renderView(){
+        ob_start();
+        include _PIA_VIEWS_.$this->_VIEW._PIA_CORE_FILES_EXTENSION_;
+        $buffer = ob_get_contents();
+        ob_end_clean();
+        return $buffer;
+    }
 
+    protected function getChild($child){
+        ob_start();
+        include _PIA_VIEWS_.$child._PIA_CORE_FILES_EXTENSION_;
+        $buffer = ob_get_contents();
+        ob_end_clean();
+        return $buffer;
+    }
+
+    protected function getOutput(){
+        return $this->_OUTPUT;
+    }
+
+    protected function output(){
+        echo $this->_OUTPUT;
+        return $this;
     }
 
     protected function addLayoutItem($type, $path){
@@ -95,10 +146,6 @@ abstract class _Pia_Controller
 
     protected function getModel($model){
         return $this->_MODELS[$model];
-    }
-
-    protected function modelExists($model){
-
     }
 
     private function getModelPath($model){

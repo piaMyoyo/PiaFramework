@@ -1,6 +1,12 @@
 {
-    "scss": "_PIA_FRONTEND_SCSS_",
-    "css": "_PIA_FRONTEND_CSS_",
-    "js": "_PIA_FRONTEND_JS_",
-    "img": "_PIA_FRONTEND_IMG_"
+    "sources": {
+        "css": {
+            "tag": "<link rel=\"stylesheet\" type=\"text/css\" href=\"@src\" @attr>",
+            "basepath": "css/"
+        },
+        "js": {
+            "tag": "<script src=\"@src\" @attr></script>",
+            "basepath": "js/"
+        }
+    }
 }
