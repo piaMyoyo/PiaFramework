@@ -150,8 +150,8 @@ abstract class _Pia_Controller
     private function configSources(){
         $sources = $this->_CONFIG->_LAYOUT->sources;
         foreach($sources as $type => $source) {
-            $this->buildHeadHtmlSourceTag($type, $source);
             $this->buildHeadHtmlExternalTag($type, $source);
+            $this->buildHeadHtmlSourceTag($type, $source);
         }
     }
 
