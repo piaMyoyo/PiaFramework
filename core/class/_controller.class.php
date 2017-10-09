@@ -90,7 +90,7 @@ abstract class _Pia_Controller
         return $this->_VIEW;
     }
 
-    protected function render(){
+    protected function render($minify=false){
         ob_start();
         if($this->_TEMPLATE && !is_null($this->_TEMPLATE)){
             include _PIA_VIEWS_.$this->_TEMPLATE._PIA_CORE_FILES_EXTENSION_;
@@ -100,6 +100,26 @@ abstract class _Pia_Controller
         $this->_OUTPUT = ob_get_contents();
         ob_end_clean();
         return $this;
+    }
+
+    protected function minifyHtmlOutput(){
+        $search = array(
+            '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
+            '/[^\S ]+\</s',     // strip whitespaces before tags, except space
+            '/(\s)+/s',         // shorten multiple whitespace sequences
+            '/<!--(.|\s)*?-->/' // Remove HTML comments
+        );
+
+        $replace = array(
+            '>',
+            '<',
+            '\\1',
+            ''
+        );
+
+        $buffer = preg_replace($search, $replace, $buffer);
+
+        return $buffer;
     }
 
     protected function renderView(){
@@ -131,19 +151,43 @@ abstract class _Pia_Controller
         $sources = $this->_CONFIG->_LAYOUT->sources;
         foreach($sources as $type => $source) {
             $this->buildHeadHtmlSourceTag($type, $source);
+            $this->buildHeadHtmlExternalTag($type, $source);
         }
-        var_dump($this->_SOURCES);
     }
 
     private function buildHeadHtmlSourceTag($type, $source){
-        if(!isset($this->_LAYOUT_CONFIG->head->$type))
+        if(!isset($this->_LAYOUT_CONFIG->head->$type) || !isset($this->_LAYOUT_CONFIG->head->$type->sources))
             return false;
 
         $items = $this->_LAYOUT_CONFIG->head->$type->sources;
 
         foreach($items as $key => $item) {
             $filePath = str_replace('@src', _PIA_SOURCE_.$source->basepath.$item.$source->extension, $source->tag);
-            $this->_SOURCES[$type][$key] = $filePath;
+            $this->_SOURCES[$type][] = $filePath;
+        }
+    }
+
+    private function buildHeadHtmlExternalTag($type, $source){
+        if(!isset($this->_LAYOUT_CONFIG->head->$type) || !isset($this->_LAYOUT_CONFIG->head->$type->external))
+            return false;
+
+        $items = $this->_LAYOUT_CONFIG->head->$type->external;
+
+        foreach($items as $key => $item) {
+            $this->_SOURCES[$type][] = str_replace('@src', $item, $source->tag);
+        }
+    }
+
+    protected function getSources($type){
+        if(array_key_exists($type, $this->_SOURCES) && count($this->_SOURCES[$type]) > 0){
+            $sourceString = '';
+            $sources = $this->_SOURCES[$type];
+            foreach($sources as $source){
+                $sourceString .= $source;
+            }
+            return $sourceString;
+        }else{
+            return false;
         }
     }
 

@@ -5,6 +5,9 @@
             "sources": [
                 "style",
                 "home"
+            ],
+            "external" : [
+                "https://fonts.googleapis.com/css?family=Roboto"
             ]
         },
         "js": {
