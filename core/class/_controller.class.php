@@ -90,7 +90,7 @@ abstract class _Pia_Controller
         return $this->_VIEW;
     }
 
-    protected function render($minify=false){
+    protected function render(){
         ob_start();
         if($this->_TEMPLATE && !is_null($this->_TEMPLATE)){
             include _PIA_VIEWS_.$this->_TEMPLATE._PIA_CORE_FILES_EXTENSION_;
@@ -102,7 +102,7 @@ abstract class _Pia_Controller
         return $this;
     }
 
-    protected function minifyHtmlOutput(){
+    protected function minifyHtmlOutput($buffer){
         $search = array(
             '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
             '/[^\S ]+\</s',     // strip whitespaces before tags, except space
@@ -143,7 +143,9 @@ abstract class _Pia_Controller
     }
 
     protected function output(){
-        echo $this->_OUTPUT;
+        if(!isset($this->_LAYOUT_CONFIG->minify_html) || $this->_LAYOUT_CONFIG->minify_html == false)
+            echo $this->_OUTPUT;
+        else echo $this->minifyHtmlOutput($this->_OUTPUT);
         return $this;
     }
 

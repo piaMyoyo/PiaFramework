@@ -1,5 +1,6 @@
 {
     "template": "template/base",
+    "minify_html": true,
     "head": {
         "css": {
             "sources": [
