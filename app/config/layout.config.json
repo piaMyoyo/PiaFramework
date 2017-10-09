@@ -1,12 +1,19 @@
 {
     "sources": {
         "css": {
-            "tag": "<link rel=\"stylesheet\" type=\"text/css\" href=\"@src\" @attr>",
-            "basepath": "css/"
+            "tag": "<link rel=\"stylesheet\" type=\"text/css\" href=\"@src\">",
+            "basepath": "css/",
+            "concatenate": true,
+            "extension" : ".css"
         },
         "js": {
-            "tag": "<script src=\"@src\" @attr></script>",
-            "basepath": "js/"
+            "tag": "<script src=\"@src\"></script>",
+            "basepath": "js/",
+            "concatenate": true,
+            "extension" : ".js"
+        },
+        "img": {
+            "basepath": "img/"
         }
     }
 }

@@ -10,7 +10,7 @@ define('_PIA_LAYOUT_', _PIA_APP_.'layout/');
 // -----------------------------------------
 
 // Frontend environment vars
-define('_PIA_FRONTEND_', _PIA_ENV_.'/src/');
+define('_PIA_SOURCE_', '/src/');
 // -----------------------------------------
 
 ?>

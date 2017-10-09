@@ -18,6 +18,7 @@ abstract class _Pia_Controller
     private $_LAYOUT_CONFIG;
     private $_VIEW;
     private $_TEMPLATE;
+    private $_SOURCES;
 
     private $_OUTPUT;
 
@@ -71,6 +72,7 @@ abstract class _Pia_Controller
             $this->_LAYOUT = $layout;
             $this->_LAYOUT_CONFIG = json_decode( file_get_contents( $layoutParamsPath ) );
             $this->_TEMPLATE = $this->_LAYOUT_CONFIG->template;
+            $this->configSources();
         }
         return $this;
     }
@@ -125,7 +127,27 @@ abstract class _Pia_Controller
         return $this;
     }
 
-    protected function addLayoutItem($type, $path){
+    private function configSources(){
+        $sources = $this->_CONFIG->_LAYOUT->sources;
+        foreach($sources as $type => $source) {
+            $this->buildHeadHtmlSourceTag($type, $source);
+        }
+        var_dump($this->_SOURCES);
+    }
+
+    private function buildHeadHtmlSourceTag($type, $source){
+        if(!isset($this->_LAYOUT_CONFIG->head->$type))
+            return false;
+
+        $items = $this->_LAYOUT_CONFIG->head->$type->sources;
+
+        foreach($items as $key => $item) {
+            $filePath = str_replace('@src', _PIA_SOURCE_.$source->basepath.$item.$source->extension, $source->tag);
+            $this->_SOURCES[$type][$key] = $filePath;
+        }
+    }
+
+    protected function addLayoutItem($type, $source){
         
     }
 
