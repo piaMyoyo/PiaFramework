@@ -104,10 +104,10 @@ abstract class _Pia_Controller
 
     protected function minifyHtmlOutput($buffer){
         $search = array(
-            '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
-            '/[^\S ]+\</s',     // strip whitespaces before tags, except space
-            '/(\s)+/s',         // shorten multiple whitespace sequences
-            '/<!--(.|\s)*?-->/' // Remove HTML comments
+            '/\>[^\S ]+/s',
+            '/[^\S ]+\</s',
+            '/(\s)+/s',
+            '/<!--(.|\s)*?-->/'
         );
 
         $replace = array(
@@ -153,7 +153,11 @@ abstract class _Pia_Controller
         $sources = $this->_CONFIG->_LAYOUT->sources;
         foreach($sources as $type => $source) {
             $this->buildHeadHtmlExternalTag($type, $source);
-            $this->buildHeadHtmlSourceTag($type, $source);
+            if(!isset($source->concatenate) || $source->concatenate !== true){
+                $this->buildHeadHtmlSourceTag($type, $source);
+            }else{
+                $this->concatenateHeadHtmlSourceTag($type, $source);
+            }
         }
     }
 
@@ -167,6 +171,59 @@ abstract class _Pia_Controller
             $filePath = str_replace('@src', _PIA_SOURCE_.$source->basepath.$item.$source->extension, $source->tag);
             $this->_SOURCES[$type][] = $filePath;
         }
+    }
+
+    private function concatenateHeadHtmlSourceTag($type, $source){
+        if(!isset($this->_LAYOUT_CONFIG->head->$type) || !isset($this->_LAYOUT_CONFIG->head->$type->sources))
+            return false;
+
+        $items = $this->_LAYOUT_CONFIG->head->$type->sources;
+        $cacheDirPath = _PIA_ENV_._PIA_SOURCES_VARS_.$type;
+        $cacheWebDirPath = _PIA_SOURCES_VARS_.$type;
+
+        if(is_dir($cacheDirPath)){
+
+            $filePathString = '';
+            foreach($items as $key => $item) {
+                $filePathString .= $item;
+            }
+            $fileName = md5($filePathString).$source->extension;
+
+            if(file_exists($cacheDirPath.'/'.$fileName)){
+                $filePath = $cacheWebDirPath.'/'.$fileName;
+                $this->_SOURCES[$type][] = str_replace('@src', $filePath, $source->tag);
+            }else{
+                $this->buildConcatenateHeadHtmlSourceTag($type, $source);
+            }
+
+        }else{
+            $this->buildConcatenateHeadHtmlSourceTag($type, $source);
+        }
+    }
+
+    private function buildConcatenateHeadHtmlSourceTag($type, $source){
+        $items = $this->_LAYOUT_CONFIG->head->$type->sources;
+        $cacheDirPath = _PIA_ENV_._PIA_SOURCES_VARS_.$type;
+        $cacheWebDirPath = _PIA_SOURCES_VARS_.$type;
+
+        if(!is_dir(_PIA_ENV_._PIA_SOURCES_VARS_)){
+            mkdir(_PIA_ENV_._PIA_SOURCES_VARS_);
+        }
+
+        if(!is_dir($cacheDirPath)){
+            mkdir($cacheDirPath);
+        }
+
+        $filePathString = '';
+        $fileContent = '';
+        foreach($items as $key => $item) {
+            $filePathString .= $item;
+            $fileContent .= file_get_contents(_PIA_SOURCE_REL_.$source->basepath.$item.$source->extension);
+        }
+        $fileName = md5($filePathString).$source->extension;
+        $filePath = $cacheWebDirPath.'/'.$fileName;
+        file_put_contents($cacheDirPath.'/'.$fileName, $fileContent);
+        $this->_SOURCES[$type][] = str_replace('@src', $filePath, $source->tag);
     }
 
     private function buildHeadHtmlExternalTag($type, $source){

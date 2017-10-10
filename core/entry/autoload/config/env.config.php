@@ -10,7 +10,13 @@ define('_PIA_LAYOUT_', _PIA_APP_.'layout/');
 // -----------------------------------------
 
 // Frontend environment vars
-define('_PIA_SOURCE_', '/src/');
+define('_PIA_SOURCE_', 'src/');
+define('_PIA_SOURCE_REL_', _PIA_ENV_.'/src/');
+// -----------------------------------------
+
+// Viriable ressources environment vars
+define('_PIA_VARS_', '/var/');
+define('_PIA_SOURCES_VARS_', _PIA_VARS_.'web/');
 // -----------------------------------------
 
 ?>
