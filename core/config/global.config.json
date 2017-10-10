@@ -12,6 +12,10 @@
         "prefix": "",
         "suffix": "_model"
     },
+    "helper": {
+        "prefix": "",
+        "suffix": "_helper"
+    },
     "data": [
         "app"
     ]

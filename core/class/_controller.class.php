@@ -14,6 +14,7 @@ abstract class _Pia_Controller
     private $_CONFIG;
 
     private $_MODELS;
+    private $_HELPER;
     private $_LAYOUT;
     private $_LAYOUT_CONFIG;
     private $_VIEW;
@@ -93,9 +94,9 @@ abstract class _Pia_Controller
     protected function render(){
         ob_start();
         if($this->_TEMPLATE && !is_null($this->_TEMPLATE)){
-            include _PIA_VIEWS_.$this->_TEMPLATE._PIA_CORE_FILES_EXTENSION_;
+            include _PIA_VIEWS_.$this->_TEMPLATE._PIA_TEMPLATE_EXTENSION_;
         }else{
-            include _PIA_VIEWS_.$this->_VIEW._PIA_CORE_FILES_EXTENSION_;
+            include _PIA_VIEWS_.$this->_VIEW._PIA_TEMPLATE_EXTENSION_;
         }
         $this->_OUTPUT = ob_get_contents();
         ob_end_clean();
@@ -124,7 +125,7 @@ abstract class _Pia_Controller
 
     protected function renderView(){
         ob_start();
-        include _PIA_VIEWS_.$this->_VIEW._PIA_CORE_FILES_EXTENSION_;
+        include _PIA_VIEWS_.$this->_VIEW._PIA_TEMPLATE_EXTENSION_;
         $buffer = ob_get_contents();
         ob_end_clean();
         return $buffer;
@@ -132,7 +133,7 @@ abstract class _Pia_Controller
 
     protected function getChild($child){
         ob_start();
-        include _PIA_VIEWS_.$child._PIA_CORE_FILES_EXTENSION_;
+        include _PIA_VIEWS_.$child._PIA_TEMPLATE_EXTENSION_;
         $buffer = ob_get_contents();
         ob_end_clean();
         return $buffer;
@@ -291,6 +292,19 @@ abstract class _Pia_Controller
         $modelPathArray = explode('/', $model);
         $modelNameIndex = count($modelPathArray) - 1;
         return $modelPathArray[$modelNameIndex];
+    }
+
+    protected function getHelper($helper){
+        $helperPath = _PIA_HELPER_.'/'.$helper._PIA_CORE_FILES_EXTENSION_;
+        if(file_exists($helperPath)){
+            require_once $helperPath;
+            $helperName = str_replace('/', '_', $helper);
+            $helperFullName = $this->_CONFIG->_GLOBAL->helper->prefix.$helperName.$this->_CONFIG->_GLOBAL->helper->suffix;
+            if(class_exists($helperFullName))
+                return new $helperFullName();
+            else return false;
+        }
+        else return false;
     }
 
 }

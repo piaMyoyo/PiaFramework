@@ -12,6 +12,7 @@ class c_home extends PiaController
     public function index(){
         $this->loadModel('page');
         $pages = $this->getModel('page')->getPages();
+        $helper = $this->getHelper('crypt');
         $this->prepareLayout('main')->loadView('home')->render(true)->output();
         // var_dump($pages);
     }
