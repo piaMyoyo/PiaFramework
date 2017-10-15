@@ -1,2 +1,5 @@
 # GULP
 node_modules/
+
+# CONFIG
+app/config/*
